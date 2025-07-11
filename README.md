@@ -21,7 +21,19 @@ This repository contains the code, and scripts to reproduce the key results from
 # Running the Code
 All experiments need to be run with SNC on and off. Since this needs to be done manuall and needs a reboot, we recommend first collecting the data with SNC off (Mostly baseline numbers), and then collecting the data with SNC on (Baseline and TiNA numbers). While the directions here are grouped by each experiment, the data collection should be done in two passes. (First run the SNC off portion of ALL experiments, and then run the SNC on portion of ALL experiments).
 
+# Building the HW bitstream and programming the fpga
+To build the hardware bitstream, navigate to the `tina-hw/` directory and run the following command:
+```bash
+make
+```
+This will generate the bitstream file `tina.bit` in the `tina-hw/` directory.
+To program the FPGA with the generated bitstream, use the following command:
+```bash
+sudo vivado -mode batch -source program_fpga.tcl
+```
+
 ## Figure 3: Memory Bandwidth and Latency
+This experiment is run on the test machine only (Sapphire Rapids Platform for the results in the paper)
 To generate Figure 3, run the following command from the root of the repository:
 
 ### SNC Off
@@ -46,3 +58,6 @@ This will generate a plot in the `plots/` directory showing the memory bandwidth
 
 
 ## Figure 4: SNC vs Non-SNC Network Latency
+This experiment requires the test machine, the load generator machine and the FPGA to be programmed and active.
+To generate Figure 4, run the following command from the root of the repository on the test machine:
+```bash
