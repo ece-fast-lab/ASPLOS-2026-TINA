@@ -2,6 +2,10 @@
 
 ################################################### Helpers ########################################################
 
+MLC=externals/intel-mlc/mlc
+DATA_DIR=data/memory-experiments
+mkdir -p $DATA_DIR
+
 printf_c() {
 
 	R=31
@@ -64,19 +68,19 @@ delay_loop_us=(4000 2000 1000 800 600 400 200 100 0)
 trap "echo 'exiting script'; exit" SIGINT
 
 if [ "$BW_OR_LAT" == "LAT" ]; then
-    printf_c Y "Running mlc with LAT\n"
+    printf_c Y "Running  with LAT\n"
     for i in ${size_loop_kb[@]}
     do
-        printf_c Y "Running mlc with buffer ${i}KB\n"
-        mlc -b${i} --idle_latency -h >> ${RX_OP_MODE}_mlc_exp.log
+        printf_c Y "Running $MLC with buffer ${i}KB\n"
+        $MLC -b${i} --idle_latency >> ${DATA_DIR}/${RX_OP_MODE}_mlc_exp_lat.log
     done
 
 elif [ "$BW_OR_LAT" == "BW" ]; then
-    printf_c Y "Running mlc with BW\n"
+    printf_c Y "Running $MLC with BW\n"
     for i in ${delay_loop_us[@]}
     do
-        printf_c Y "Running mlc with delay ${i}us\n"
-        mlc --loaded_latency -d${i} -k1-7 >> ${RX_OP_MODE}_mlc_exp_bw.log
+        printf_c Y "Running $MLC with delay ${i}us\n"
+        $MLC --loaded_latency -d${i} -k1-7 >> ${DATA_DIR}/${RX_OP_MODE}_mlc_exp_bw.log
     done
 
 else 
