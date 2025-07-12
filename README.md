@@ -2,6 +2,11 @@
 
 This repository contains the code, and scripts to reproduce the key results from "TiNA: Tiered Network Buffer Architecture for Fast Networking in Chiplet-based CPUs"
 
+Please clone the repository with submodules
+```bash
+git clone --recurse-submodules git@github.com:ece-fast-lab/gem5_profiling.git
+```
+
 # Directory Structure
 - `flows/`: Contains scripts for generating plots and analyzing data.
 - `data/`: Generated raw data will be stored here.
@@ -10,7 +15,7 @@ This repository contains the code, and scripts to reproduce the key results from
 - `tina-hw/`: Contains the hardware design files for the TiNA architecture.
 - `tina-sw/`: Contains the software components for the TiNA stack and the benchmarks.
 
-# Requirements
+# Prerequisites
 - Python 3.8 or higher
 - Required Python packages can be installed using the `requirements.txt` file.
 - DPDK Version 22.07
@@ -18,10 +23,29 @@ This repository contains the code, and scripts to reproduce the key results from
 - MLNX OFED for Mellanox NICs
 - linux-tools for cpupower for locking the CPU frequency
 
-# Running the Code
-All experiments need to be run with SNC on and off. Since this needs to be done manuall and needs a reboot, we recommend first collecting the data with SNC off (Mostly baseline numbers), and then collecting the data with SNC on (Baseline and TiNA numbers). While the directions here are grouped by each experiment, the data collection should be done in two passes. (First run the SNC off portion of ALL experiments, and then run the SNC on portion of ALL experiments).
+## DPDK
+Install dpdk from the externals directory:
+```bash
 
-# Building the HW bitstream and programming the fpga
+```
+
+## Building the Software
+
+Please first clone the repository on both the test machine and the load generator machine.
+To build the software components, navigate to the directory on the test machine and run the following command:
+```bash
+cd tina-sw/rx
+make
+```
+This will compile the software components and generate the necessary binaries in the `tina-sw/rx
+` directory.
+To build the software components on the load generator machine, navigate to the `tina-sw/tx` directory and run the following command:
+```bash
+cd tina-sw/tx
+make
+```
+
+## FPGA
 To build the hardware bitstream, navigate to the `tina-hw/` directory and run the following command:
 ```bash
 make
@@ -31,6 +55,9 @@ To program the FPGA with the generated bitstream, use the following command:
 ```bash
 sudo vivado -mode batch -source program_fpga.tcl
 ```
+
+# A note on the Experiment Workflow
+All experiments need to be run with SNC on and off. Since this needs to be done manuall and needs a reboot, we recommend first collecting the data with SNC off (Mostly baseline numbers), and then collecting the data with SNC on (Baseline and TiNA numbers). While the directions here are grouped by each experiment, the data collection should be done in two passes. (First run the SNC off portion of ALL experiments, and then run the SNC on portion of ALL experiments).
 
 ## Figure 3: Memory Bandwidth and Latency
 This experiment is run on the test machine only (Sapphire Rapids Platform for the results in the paper)

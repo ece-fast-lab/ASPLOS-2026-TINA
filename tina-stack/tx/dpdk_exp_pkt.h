@@ -1,7 +1,7 @@
 #ifndef DPDK_EXP_PKT_H
 #define DPDK_EXP_PKT_H
 #include <rte_ethdev.h>
-#include "../dpdk-rx/dpdk_perf.h"
+#include "../rx/dpdk_perf.h"
 #pragma GCC diagnostic ignored "-Wpacked-not-aligned"
 struct dpdk_exp_pkt
 {

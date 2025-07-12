@@ -1,7 +1,7 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-#include "../dpdk-tx/dpdk_exp_pkt.h"
+#include "../tx/dpdk_exp_pkt.h"
 #include "apps/base_app.h"
 
 #include <getopt.h>

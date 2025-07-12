@@ -21,7 +21,7 @@
 
 
 #include "base_app.h"
-#include "../../dpdk-tx/dpdk_exp_pkt.h"
+#include "../../tx/dpdk_exp_pkt.h"
 
 #define SRC_PORT_SAMPLE_SIZE 8
 
