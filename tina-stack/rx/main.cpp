@@ -22,7 +22,7 @@
                    "to avoid any potential experiment inaccuracy\n"             \
                    "\033[0m");                                                  \
         } else {                                                                \
-            bring_down_interface(if_name);                                      \
+                                                                              \
         }                                                                       \
         rte_exit(__VA_ARGS__);                                                  \
                                                                                 \
