@@ -75,7 +75,7 @@ private:
 public:
 
     static void init_engine(std::string engine_id, std::string algorithm, size_t num_lcores){
-        if (engine_id != "rdrand" && engine_id != "pka") {
+        if (engine_id != "dynamic" && engine_id != "pka") {
             assert((std::string("Unknown engine id: %s\n") + engine_id).c_str() && false);
         }
 
