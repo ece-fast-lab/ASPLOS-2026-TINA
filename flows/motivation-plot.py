@@ -341,8 +341,10 @@ def plot_latency_curve_motivation_all(df, ax, label="", color=DEFAULT_COLORS['SN
 
 
 def plot_apps():
-    dir_list = ["DATA/DYNAMIC", "DATA/KVS", "DATA/NAT", "DATA/RSA"]
-    # dir_list = ["DATA/DYNAMIC"]
+    dir_list = ["DATA/APPS/TouchFwd",
+                "DATA/APPS/KVS", 
+                "DATA/APPS/NAT",
+                "DATA/APPS/RSA"]
     hatchstyle = ['', '', '']
     alpha_vals = [1, 0.6, 0.3]
     linecolors = {
@@ -442,7 +444,7 @@ def plot_apps():
         )
         
     plt.subplots_adjust(left=0.11, right=0.99, top=0.93, bottom=0.06, wspace=0.0, hspace=0.23)
-    plt.savefig("app_latency_all.pdf", dpi=600)
+    plt.savefig("plots/fig11.pdf", dpi=600)
 
 
 def plot_app_cdf():
@@ -701,9 +703,10 @@ def main():
         print(f"No valid latency data found in {args.single_input_dir}.")
         sys.exit(1)
         
-    plot_latency_boxplot(df, output_file=args.boxplot_output_motivation, categories=['SNC', 'non-SNC'])
-    plot_latency_boxplot(df, output_file=args.boxplot_output_s8, categories=['SNC', 'non-SNC', 'TiNA'])
-    plot_latency_curve_trace(df, output_file=args.compare_trace_output) 
+    # plot_latency_boxplot(df, output_file=args.boxplot_output_motivation, categories=['SNC', 'non-SNC'])
+    # plot_latency_boxplot(df, output_file=args.boxplot_output_s8, categories=['SNC', 'non-SNC', 'TiNA'])
+    # plot_latency_curve_trace(df, output_file=args.compare_trace_output) 
+    plot_apps()
     
 
 

@@ -115,7 +115,7 @@ sudo flows/run-motivation-tx.sh SNC
 Finally, you can generate the plot by running:
 ```bash
 ## ON the load generator machine (Network Latency is recored on the load generator machine as packets are returned)
-python flows/motivation-plot.py
+python flows/motivation-plot.py 
 ```
 
 ## Figure 9: TiNA Network Latency
@@ -130,6 +130,12 @@ sudo flows/run-tina-rx.sh
 sudo flows/run-motivation-tx.sh TINA
 ```
 
+Then, you can generate the plot by running:
+```bash
+## ON the load generator machine (Network Latency is recored on the load generator machine as packets are returned)
+python flows/motivation-plot.py
+```
+
 ## Figure 11: End To End Applications
 
 This experiment requires the test machine, the load generator machine and the FPGA to be programmed and active, along with programmed threshold values.
@@ -138,20 +144,77 @@ SNC must be turned on for this experiment.
 To generate Figure 11, run the following command:
 ```bash
 ## ON the test machine
-sudo flows/run-tina-app.sh NONSNC ToucFwd
+```bash
+sudo flows/run-app-rx.sh TouchFwd NOSNC
 ## ON the load generator machine
-sudo flows/run-traces-tx.sh NOSNC TouchFwd
+sudo flows/run-traces-tx.sh TouchFwd NOSNC
 
-sudo flows/run-tina-app.sh RSA
+## ON the test machine
+sudo flows/run-app-rx.sh RSA NOSNC
 ## ON the load generator machine
-sudo flows/run-traces-tx.sh NOSNC RSA
+sudo flows/run-traces-tx.sh RSA NOSNC
 
-sudo flows/run-tina-app.sh KVS
+## ON the test machine
+sudo flows/run-app-rx.sh KVS NOSNC
 ## ON the load generator machine
-sudo flows/run-traces-tx.sh NOSNC KVS
+sudo flows/run-traces-tx.sh KVS NOSNC
 
-sudo flows/run-tina-app.sh NAT
+## ON the test machine
+sudo flows/run-app-rx.sh NAT NOSNC
 ## ON the load generator machine
-sudo flows/run-traces-tx.sh NOSNC NAT
+sudo flows/run-traces-tx.sh NAT NOSNC
 ```
-Repeat the above commands with SNC turned on, and then finaly for TINA.
+Repeat the above commands with SNC turned on for SNC
+
+```bash
+## ON the test machine
+sudo flows/run-app-rx.sh TouchFwd SNC
+## ON the load generator machine
+sudo flows/run-traces-tx.sh TouchFwd SNC
+
+## ON the test machine
+sudo flows/run-app-rx.sh RSA SNC
+## ON the load generator machine
+sudo flows/run-traces-tx.sh RSA SNC
+
+## ON the test machine
+sudo flows/run-app-rx.sh KVS SNC
+## ON the load generator machine
+sudo flows/run-traces-tx.sh KVS SNC
+
+## ON the test machine  
+sudo flows/run-app-rx.sh NAT SNC
+## ON the load generator machine
+sudo flows/run-traces-tx.sh NAT SNC
+```
+
+
+Then, run the experiments for TINA
+
+```bash
+## ON the test machine
+sudo flows/run-app-rx.sh TouchFwd TINA
+## ON the load generator machine
+sudo flows/run-traces-tx.sh TouchFwd TINA
+
+## ON the test machine
+sudo flows/run-app-rx.sh RSA TINA
+## ON the load generator machine
+sudo flows/run-traces-tx.sh RSA TINA
+
+## ON the test machine
+sudo flows/run-app-rx.sh KVS TINA
+## ON the load generator machine
+sudo flows/run-traces-tx.sh KVS TINA
+
+## ON the test machine
+sudo flows/run-app-rx.sh NAT TINA
+## ON the load generator machine
+sudo flows/run-traces-tx.sh NAT TINA
+```
+
+Finally, you can generate the plot by running:
+```bash
+## ON the load generator machine (Network Latency is recored on the load generator machine as packets are returned)
+python flows/motivation-plot.py
+```
