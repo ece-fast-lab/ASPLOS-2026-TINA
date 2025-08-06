@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import argparse
 import sys
 import numpy as np
-import scienceplots
 import statistics
 from matplotlib.patches import Patch
 import matplotlib
@@ -50,7 +49,7 @@ def parse_filename(file_path):
 
     if 'NOSNC' in parts:
         category = 'non-SNC'
-    elif 'S8' in parts:
+    elif 'TINA' in parts:
         category = 'TiNA'
     elif 'SNC' in parts:
         category = 'SNC'
@@ -142,7 +141,7 @@ def plot_load_latnecy(df, output_file="load_latency.pdf", colors=DEFAULT_COLORS)
     plt.savefig(output_file, dpi=600)
     plt.close()
 
-def plot_latency_boxplot(df, output_file="latency_spread_boxplot-motivation.pdf", colors=DEFAULT_COLORS, box_gap=0.25, width=0.1, line_width=1, categories = ['SNC','non-SNC']):
+def plot_latency_boxplot(df, output_file="latency_spread_boxplot-motivation.pdf", colors=DEFAULT_COLORS, box_gap=0.25, width=0.1, line_width=1, categories = ['SNC','non-SNC', 'TiNA']):
     plt.figure(figsize=figure_size_global, dpi=600)
     burst_sizes = sorted(df['Burst Size'].unique())
     ## set order of categories like this SNC, non-SNC, TiNA
@@ -231,82 +230,7 @@ def plot_latency_boxplot(df, output_file="latency_spread_boxplot-motivation.pdf"
     plt.savefig(output_file, dpi=600)
     plt.close()
 
-def plot_latency_curve(df, output_file="latency_difference_curve.pdf", bar_width=0.15, y_ticks=[-0.7, -0.5, -0.3, -0.1, 0.1, 0.3, 0.5, 0.7], y_tick_labels=['-70%', '-50%', '-30%', '-10%', '10%', '30%', '50%', '70%'], ylim=(-0.55, 0.55)):
-    plt.figure(figsize=figure_size_global, dpi=200)
-    burst_sizes = sorted(df['Burst Size'].unique())
-    print(burst_sizes)
-    diff_data = []
-    diff_data_nosnc = []
-    for burst_size in burst_sizes:
-        subset_snc = df[(df['Burst Size'] == burst_size) & (df['Category'] == 'SNC')]
-        subset_nosnc = df[(df['Burst Size'] == burst_size) & (df['Category'] == 'non-SNC')]
-        subset_TiNA = df[(df['Burst Size'] == burst_size) & (df['Category'] == 'TiNA')]
-        if subset_snc.empty or subset_nosnc.empty:
-            continue
-        quantile_snc = subset_snc['Latency'].quantile(0.99)
-        quantile_nosnc = subset_nosnc['Latency'].quantile(0.99)
-        quantile_TiNA = subset_TiNA['Latency'].quantile(0.99)
-        diff_snc = (quantile_TiNA - quantile_snc) / quantile_snc
-        diff_nosnc = (quantile_TiNA - quantile_nosnc) / quantile_nosnc
-        print(diff_snc, diff_nosnc)
-        diff_data.append((burst_size, diff_snc))
-        diff_data_nosnc.append((burst_size, diff_nosnc))
-    diff_df = pd.DataFrame(diff_data, columns=['Burst Size', 'Latency Difference'])
-    diff_df_nosnc = pd.DataFrame(diff_data_nosnc, columns=['Burst Size', 'Latency Difference'])
-    offset = bar_width / 2
-    ## no. of traces 
-    x_pos = np.arange(len(diff_df['Latency Difference'])) - offset
-    x_pos_nosnc = np.arange(len(diff_df_nosnc['Latency Difference']))  + offset
-    print(x_pos)
-    print(x_pos_nosnc)
 
-    plt.bar(x_pos, diff_df['Latency Difference'], color=DEFAULT_COLORS['SNC'], width=bar_width, label='TiNA vs SNC')
-    plt.bar(x_pos_nosnc, diff_df_nosnc['Latency Difference'], color=DEFAULT_COLORS['non-SNC'], width=bar_width, label='TiNA vs non-SNC')
-
-    plt.xticks(range(0, 3), [x.split('_')[0] for x in burst_sizes])    
-    ## add legend 
-    plt.legend(ncols=2, loc='upper center', bbox_to_anchor=(0.5, 1.3))
-    plt.axhline(0, color='gray', linestyle='--', linewidth=1)
-    plt.yticks(y_ticks, y_tick_labels)
-    plt.ylim(*ylim)
-    plt.xlabel('Trace Type')
-    # plt.xlim(50, 850)
-    plt.ylabel('Rel. Latency Diff. at $P_{99}$')
-    plt.tight_layout(rect=[0, 0, 1, 1.05])
-    plt.grid(axis='y')
-    plt.savefig(output_file, dpi=600)
-    plt.close()
-
-def plot_latency_curve_all(df, ax, label="", color=DEFAULT_COLORS['SNC'], bar_width=20, ylim=(-0.55, 0.55), yticks = [-0.5, -0.3, -0.1  ,0.1, 0.3, 0.5], ytick_label = ['50%', '70%', '90%', '110%', '130%', '150%']):
-    burst_sizes = sorted(df['Burst Size'].unique())
-    diff_data = []
-    diff_data_nosnc = []
-    for burst_size in burst_sizes:
-        subset_snc = df[(df['Burst Size'] == burst_size) & (df['Category'] == 'SNC')]
-        subset_nosnc = df[(df['Burst Size'] == burst_size) & (df['Category'] == 'non-SNC')]
-        subset_TiNA = df[(df['Burst Size'] == burst_size) & (df['Category'] == 'TiNA')]
-        if subset_snc.empty or subset_nosnc.empty:
-            continue
-        quantile_snc = subset_snc['Latency'].quantile(0.99)
-        quantile_nosnc = subset_nosnc['Latency'].quantile(0.99)
-        quantile_TiNA = subset_TiNA['Latency'].quantile(0.99)
-        diff = (quantile_TiNA - quantile_snc) / quantile_snc
-        diff_nosnc = (quantile_TiNA - quantile_nosnc) / quantile_nosnc
-        diff_data.append((burst_size, diff))
-        diff_data_nosnc.append((burst_size, diff_nosnc))
-    diff_df = pd.DataFrame(diff_data, columns=['Burst Size', 'Latency Difference'])
-    diff_df_nosnc = pd.DataFrame(diff_data_nosnc, columns=['Burst Size', 'Latency Difference'])
-    offset = 0
-    ax.bar(diff_df['Burst Size'] - offset, diff_df['Latency Difference'], color=DEFAULT_COLORS['SNC'], width=bar_width)
-    ax.bar(diff_df_nosnc['Burst Size'] + offset, diff_df_nosnc['Latency Difference'], color=DEFAULT_COLORS['non-SNC'], width=bar_width)
-    ax.set_xticks(range(200, 801, 200))
-    ax.set_xticklabels([str(x) for x in range(200, 801, 200)])
-    ax.set_xlim(70,830)
-    ax.axhline(0, color='gray', linestyle='--', linewidth=1)
-    # ax.set_title(label)
-    ax.set_ylim(*ylim)
-    ax.grid(axis='y')
-    ax.set_yticks(yticks, ytick_label)
 
 def plot_latency_curve_trace(df, output_file, label="", color="darkgreen", bar_width=25, ylim=(-0.55, 0.55), 
         yticks = [-0.5, -0.3, -0.1  ,0.1, 0.3, 0.5], ytick_label = ['50%', '70%', '90%', '110%', '130%', '150%']):
@@ -755,12 +679,12 @@ def main():
     parser.add_argument("--boxplot_output_motivation", default="plots/fig4.pdf")
     
     ####!Evaluation
-    parser.add_argument("--boxplot_output_s8", default="latency_spread_boxplot_s8.pdf")
+    parser.add_argument("--boxplot_output_s8", default="plots/fig9a.pdf")
     parser.add_argument("--load_input_dir", default="DATA/LOAD")
     parser.add_argument("--load_output", default="load_latency_s8.pdf")
     
     parser.add_argument("--compare_trace", default="DATA/STATIC-0NS")
-    parser.add_argument("--compare_trace_output", default="latency_difference_curve_trace_T0.pdf")
+    parser.add_argument("--compare_trace_output", default="plots/fig9b.pdf.pdf")
     
     parser.add_argument("--compare_dirs", nargs='+', default=["DATA/STATIC-0NS", "DATA/STATIC-1000NS", "DATA/STATIC-2000NS", "DATA/STATIC-3000NS"])
     parser.add_argument("--compare_output", default="latency_difference_curve_Touch1234.pdf")
@@ -778,10 +702,10 @@ def main():
         sys.exit(1)
         
     plot_latency_boxplot(df, output_file=args.boxplot_output_motivation, categories=['SNC', 'non-SNC'])
+    plot_latency_boxplot(df, output_file=args.boxplot_output_s8, categories=['SNC', 'non-SNC', 'TiNA'])
+    plot_latency_curve_trace(df, output_file=args.compare_trace_output) 
+    
 
- 
-    
-    
 
 if __name__ == '__main__':
     main()

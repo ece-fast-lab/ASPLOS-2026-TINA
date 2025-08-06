@@ -45,10 +45,12 @@ for i in "${!BURSTDURATIONS[@]}"; do
     OUTFILE_SAMPLE="$DATA_DIR/$EXP_LABEL-$BURST.sampling"
     OUTFILE_PCIE="$DATA_DIR/$EXP_LABEL-$BURST.pcie"
 
-    # ###### PCIE Test, and get pid
-    # bash -c "$rx_pcie_monitor_command" > $OUTFILE_PCIE &
-    # RX_PCIE_MONITOR_PID=$!
-    # echo "RX_PCIE_MONITOR_PID: $RX_PCIE_MONITOR_PID"
+
+    ## INIT FPGA
+    sudo externals/pcimem/pcimem /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/resource0 0x10 w 5650
+    sudo externals/pcimem/pcimem /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/resource0 0x14 w 1758291
+    sudo externals/pcimem/pcimem /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/resource0 0x18 w 1197152
+    sudo externals/pcimem/pcimem /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/resource0 0x1C w 5788608
 
     ###### Actual TX
     sudo timeout $TIMEOUT $DPDK_TX -l 0-2 -a 0000:03:00.0 -- --source-mac=00:0a:35:06:aa:f9 --source-ip=192.168.151.21 --dest-mac=b8:3f:d2:59:5f:e1 --dest-ip=192.168.151.10 --size=1024 -i 100000 -d "$BURST" -g "$GAP" -O $OUTFILE -R $OUTFILE_SAMPLE
