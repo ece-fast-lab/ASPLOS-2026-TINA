@@ -703,9 +703,9 @@ def main():
         print(f"No valid latency data found in {args.single_input_dir}.")
         sys.exit(1)
         
-    # plot_latency_boxplot(df, output_file=args.boxplot_output_motivation, categories=['SNC', 'non-SNC'])
-    # plot_latency_boxplot(df, output_file=args.boxplot_output_s8, categories=['SNC', 'non-SNC', 'TiNA'])
-    # plot_latency_curve_trace(df, output_file=args.compare_trace_output) 
+    plot_latency_boxplot(df, output_file=args.boxplot_output_motivation, categories=['SNC', 'non-SNC'])
+    plot_latency_boxplot(df, output_file=args.boxplot_output_s8, categories=['SNC', 'non-SNC', 'TiNA'])
+    plot_latency_curve_trace(df, output_file=args.compare_trace_output) 
     plot_apps()
     
 

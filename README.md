@@ -88,7 +88,7 @@ sudo flows/memory-experiments.sh SNC BW
 After running the above commands, you can generate the plot by running:
 
 ```bash
-python flows/memory-experiments-plot.py
+python flows/memory-experiments-plot.py data/memory-experiments
 ```
 
 This will generate a plot in the `plots/` directory showing the memory bandwidth and latency for both SNC and Non-SNC configurations.
