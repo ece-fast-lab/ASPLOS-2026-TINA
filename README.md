@@ -4,7 +4,7 @@ This repository contains the code, and scripts to reproduce the key results from
 
 Please clone the repository with submodules
 ```bash
-git clone --recurse-submodules git@github.com:ece-fast-lab/gem5_profiling.git
+git clone --recurse-submodules git@github.com:ece-fast-lab/ASPLOS-2026-TINA.git
 ```
 
 # Directory Structure
